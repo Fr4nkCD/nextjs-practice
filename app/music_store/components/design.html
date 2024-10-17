@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&display=swap"
+        rel="stylesheet">
+</head>
+
+<div class="header bg-[#1a00ff] w-[100%] h-[60px] flex justify-between items-center p-2">
+    <style>
+        * { font-family: "Instrument Sans", sans-serif; }
+    </style>
+
+    <button class="logo flex flex-row items-center">
+        <img src="../resources/Icon.webp" width="80" alt="Logo">
+        <img src="../resources/Tuneland.webp" width="140" alt="Tuneland">
+    </button>
+
+    <div class="buttons flex gap-0">
+        <button class="h-[50px] px-[1.5em] py-[0.5em] rounded-md text-white transition hover:bg-[rgb(255,255,255,0.25)]">About</button>
+        <button class="h-[50px] px-[1.5em] py-[0.5em] rounded-md text-white transition hover:bg-[rgb(255,255,255,0.25)]">Products</button>
+        <button class="h-[50px] px-[1.5em] py-[0.5em] rounded-md text-white transition hover:bg-[rgb(255,255,255,0.25)]">Contact</button>
+        
+        <button class="w-[50px] h-[50px] p-[0.5em] rounded-md transition hover:bg-[rgb(255,255,255,0.25)] flex justify-center items-center">
+            <img src="../resources/Account.webp" width="40px" alt="Account">
+        </button>
+        <button class="w-[50px] h-[50px] p-[0.5em] rounded-md transition hover:bg-[rgb(255,255,255,0.25)] flex justify-center items-center">
+            <img src="../resources/Shop.webp" width="40px" alt="Shop">
+        </button>
+        <button class="w-[50px] h-[50px] p-[0.5em] rounded-md transition hover:bg-[rgb(255,255,255,0.25)] flex justify-center items-center">
+            <img src="../resources/Like.webp" width="27px" alt="Wishlist">
+        </button>
+    </div>
+</div>
+
+<div class="highlight w-[100%] h-[500px] bg-gray-600">
+    <div class="main p-10 gap-6 flex flex-col translate-y-[50%]">
+        <h1 class="text-white text-4xl font-semibold">Instrument Name</h1>
+        <p class="text-white text-xl">The Best Selling Music Instrument of 2024</p>
+        <button class="text-white font-semibold text-lg p-[0.7em] w-[140px] rounded-[100px] bg-[#e60023] transition hover:bg-[#e85066]">Shop Now</button>
+    </div>
+</div>
+
+<div class="store w-[100%] h-[500px] p-3">
+    <h1 class="text-center text-3xl font-bold">Products</h1>
+</div>
+
+<div class="footer text-white text-xs bg-[#222328] w-[100%] px-6 py-2 flex justify-between items-center">
+    <span class="text-base">© Tuneland Music.</span>
+    <div class="settings flex gap-2">
+        <button class="hover:underline">Privacy Statement</button>
+        <span>|</span>
+        <button class="hover:underline">Terms of Use</button>
+        <span>|</span>
+        <button class="hover:underline">Accessibility Statement</button>
+        <span>|</span>        
+        <button class="hover:underline">Worldwide Social Network</button>
+    </div>
+</div>
+
+</html>
