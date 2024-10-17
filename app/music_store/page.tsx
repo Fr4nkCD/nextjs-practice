@@ -2,7 +2,7 @@
 
 import Header from "./components/header"
 import Highlight from "./components/highlight"
-import { Store } from "./components/store"
+import Main from "./components/main"
 import Footer from "./components/footer"
 
 // import { Instrument_Sans } from "next/font/google"
@@ -12,13 +12,15 @@ import Footer from "./components/footer"
 // })
 
 export default function MusicShop() {
-    return(<>
+    return (<>
         <html lang="en">
-            <body>
-                {<Header/>}
-                {<Highlight/>}
-                {<Store/>}
-                {<Footer/>}
+            <body className="relative">
+                <div className="pb-[2.5rem]">
+                    {<Header />}
+                    {<Highlight />}
+                    {<Main />}
+                </div>
+                {<Footer />}
             </body>
         </html>
     </>)

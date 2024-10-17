@@ -6,10 +6,14 @@ import account from "../resources/Account.webp"
 import shop from "../resources/Shop.webp"
 import like from "../resources/Like.webp"
 
+import { useRouter } from "next/navigation"
+
 export default function Header() {
+    const router = useRouter()
+
     return (<>
         <div className="bg-[#1a00ff] w-[100%] h-[60px] flex justify-between items-center p-2">
-            <button className="logo flex flex-row items-center">
+            <button className="logo flex flex-row items-center" onClick={() => router.push('/music_store')}>
                 <Image src={logo} width={80} height={0} alt="Logo" />
                 <Image src={tuneland} width={140} height={0} alt="Tuneland" />
             </button>

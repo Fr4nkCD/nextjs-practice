@@ -2,7 +2,7 @@ import { best_Item } from "../data"
 
 export default function Highlight() {
     return (<>
-        <div className="w-full h-[500px] bg-gray-600">
+        <div className="w-full h-[500px] bg-gray-600 relative">
             <img src={best_Item.image_url} className="w-full h-full" style={{objectFit: 'cover'}}/>
             <div className="main p-10 gap-6 flex flex-col absolute translate-y-1/2 bottom-1/2">
                 <h1 className="text-white text-4xl font-semibold">{best_Item.name}</h1>
