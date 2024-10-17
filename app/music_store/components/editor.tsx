@@ -1,10 +1,11 @@
-// OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
 import React, { useState } from "react"
 
 interface EditorProps {
     data: any[];
     setItem: React.Dispatch<React.SetStateAction<any[]>>
 }
+
+// Hello
 
 export const Editor: React.FC<EditorProps> = ({ data, setItem }) => {
     const [name, setName] = useState('')
