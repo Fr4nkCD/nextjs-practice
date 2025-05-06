@@ -1,0 +1,1276 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:01.000
+So if you want to sort of follow along, you may be able to get the slides from there.
+
+00:00:01.000 --> 00:00:18.000
+And… Okay. And so I meant maybe I'll repeat what I said. So this is my website and you will see the slides of today's talk updated after the event, but you already see previous versions of these slides.
+
+00:00:18.000 --> 00:00:31.000
+On the website. And… Or is it necessary to put transcription on? Will that help?
+
+00:00:31.000 --> 00:00:38.000
+Yeah, sure. Let's see. Captions like that?
+
+00:00:38.000 --> 00:00:43.000
+Yeah, let me see if I can… do it here.
+
+00:00:43.000 --> 00:00:52.000
+So you might be able to see the transcription that's done by Microsoft itself. I hope it's correct.
+
+00:00:52.000 --> 00:01:09.000
+But maybe it's useful and not a distraction. Okay, so let's start with the first talk. So I'm going to talk about, as you can see, metacons and machine learning security and privacy. Let me explain what I mean by meta concerns.
+
+00:01:09.000 --> 00:01:16.000
+So in last year's talk at WISDEC, I talked about security privacy in machine learning systems.
+
+00:01:16.000 --> 00:01:19.000
+And how to sort of approach them in a systematic way.
+
+00:01:19.000 --> 00:01:31.000
+And this has been a very hot research topic. Many people including me and Akshan Oak and many others have been working on different security privacy problems.
+
+00:01:31.000 --> 00:01:37.000
+What I'm going to talk about today is not about specific problems as such, although I will use one as an example.
+
+00:01:37.000 --> 00:01:50.000
+But about the emergent concerns that arise when you think about machine learning security and privacy problems and not about a specific problem, but about This is why you call it meta concerns.
+
+00:01:50.000 --> 00:01:58.000
+So because some of you haven't seen my talk at this date last year, let me first give you a little bit of an introduction.
+
+00:01:58.000 --> 00:02:06.000
+Big picture. Why one should study security and privacy in machine learning and how one should go about doing that.
+
+00:02:06.000 --> 00:02:14.000
+And then I would use one of these concerns, which I call model stealing. And it's intentionally that I put it in quotes.
+
+00:02:14.000 --> 00:02:19.000
+I will talk about model stealing because I want to use that as an example for the next part.
+
+00:02:19.000 --> 00:02:35.000
+And then I'll talk about two meta concerns. One is whether we are using the right adversity models meaning that Whenever you think about security and privacy, you have to characterize What are you trying to protect from, but also who are you trying to protect from? And that's the adversary.
+
+00:02:35.000 --> 00:02:42.000
+And in order to do that well, you have to have a good adversary model. What is the adversary capable of?
+
+00:02:42.000 --> 00:02:53.000
+What are the limitations of the adversity and so on. And then I will raise these meta concerns that do machine learning security privacy research work.
+
+00:02:53.000 --> 00:03:08.000
+Consider the right adversity model. And then the second metacons I'm going to talk about is How do we simultaneously deploy defenses against multiple concerns? As you will see in a minute, there are many different security privacy concerns.
+
+00:03:08.000 --> 00:03:15.000
+And usually researchers focus on one of them because it's not practical to think about many of them at the same time.
+
+00:03:15.000 --> 00:03:22.000
+And then if you're a practitioner you need to deploy multiple defenses against different concerns at the same time.
+
+00:03:22.000 --> 00:03:32.000
+And I want to raise this issue of what problems arise when you want to protect against multiple concerns simultaneously.
+
+00:03:32.000 --> 00:03:39.000
+So let me first do this introductory bit, which people at this like may have already seen.
+
+00:03:39.000 --> 00:03:42.000
+But for the benefit of the others, bear with me for the next.
+
+00:03:42.000 --> 00:03:51.000
+10 minutes or so. So I'm sure I don't need to convince you that AI is going to be is already becoming pervasive.
+
+00:03:51.000 --> 00:03:58.000
+So this is a graph that measures North American market size And you can see that the growth is exponential.
+
+00:03:58.000 --> 00:04:04.000
+And I could have picked anything else. I could have picked a number of people who are studying AI.
+
+00:04:04.000 --> 00:04:14.000
+Number of startups, investment in AI, investment in research in AI, all of the graphs would look like that. The growth is exponential.
+
+00:04:14.000 --> 00:04:32.000
+It's not just the volume, but also the scale. So AI is being used for used in Pretty much every aspect of every aspect people's lives. So AI is being used for medicine how to develop personalized precision medicine techniques.
+
+00:04:32.000 --> 00:04:42.000
+So that the treatment for you will be tailored for you taking your history and your considerations into account.
+
+00:04:42.000 --> 00:04:52.000
+It may be that AI is being used for policing. How do we predict crime before it happens and how do we stop it?
+
+00:04:52.000 --> 00:04:57.000
+Ai is definitely used for recruiting. If you apply for any big company for a job.
+
+00:04:57.000 --> 00:05:01.000
+Your CV or your resume is first scanned by some AI.
+
+00:05:01.000 --> 00:05:12.000
+And only then some human will look at it. And AI has also been used in cybersecurity inclusion detection, detecting malware and viruses and so on.
+
+00:05:12.000 --> 00:05:20.000
+So it's not an understatement to say every aspect of our lives, be it our profession, be it our hobbies.
+
+00:05:20.000 --> 00:05:25.000
+Be it our engagement in society, everything is being affected by AI.
+
+00:05:25.000 --> 00:05:36.000
+And there are good reasons for that because AI has shown dramatic results in improving efficiency and productivity and so on.
+
+00:05:36.000 --> 00:05:54.000
+But whenever a technology becomes so successful that a lot of people and a lot of investment is attracted towards the technology, it also attracts bad actors. Bad actors who try to circumvent or undermine the system to their own needs.
+
+00:05:54.000 --> 00:05:58.000
+So this is why I think one should think about security and privacy.
+
+00:05:58.000 --> 00:06:14.000
+And I said, oh, I think we could characterize ourselves as system security people we are not by training ai experts And in system security, this is the the core of what we do. We think about systems.
+
+00:06:14.000 --> 00:06:24.000
+Where there could be potential adversity and behavioral And then try to understand what calm they could cause and try to protect against those harms.
+
+00:06:24.000 --> 00:06:31.000
+So if you want to apply the system security approach to AI, and specifically I'm going to talk about machine learning.
+
+00:06:31.000 --> 00:06:35.000
+And in the rest of the talk, I will use AI and machine learning as if they are synonyms.
+
+00:06:35.000 --> 00:06:41.000
+But I'm sure you all know that machine learning is only one type of AI, but it's the dominant type today.
+
+00:06:41.000 --> 00:06:44.000
+So that's why I'm going to limit myself to machine learning.
+
+00:06:44.000 --> 00:06:52.000
+So to understand adversity at the AVA systematically in machine learning systems.
+
+00:06:52.000 --> 00:06:57.000
+We could bring this system security approach of thinking about what the system is.
+
+00:06:57.000 --> 00:07:15.000
+And thinking about different types of advisories. So if you think about machine learning with some level of approximation you can imagine a pipeline like a system model that sort of looks like this there are some data owners from whom data is collected.
+
+00:07:15.000 --> 00:07:29.000
+And then a model trainer, which is usually some expert uses some kind of training framework like MyTouch or TensorFlow or something like that Possibly also with third-party libraries.
+
+00:07:29.000 --> 00:07:41.000
+To train a model using this data set to solve some problems. So the resulting thing artifact from this process is the machine learning model.
+
+00:07:41.000 --> 00:07:45.000
+And the machine learning model is then made available to potential clients.
+
+00:07:45.000 --> 00:07:54.000
+Usually via some API, right? It's not always the case that the clients get hold of the model directly, but they have some interface.
+
+00:07:54.000 --> 00:08:04.000
+So I think about Google Translate. You have two different kinds of interfaces. You can either use the web interface where you go and type some input and Google Translate will translate it for you.
+
+00:08:04.000 --> 00:08:14.000
+Or you have some API that you can use from your software where you would invoke the Google Translate API, send some inputs and get some output.
+
+00:08:14.000 --> 00:08:22.000
+When you're using an interface like that, usually there is some access control like a firewall, so that clients don't get direct access to the model.
+
+00:08:22.000 --> 00:08:37.000
+And even when the model itself is sent to the client's computing device, it's often the case that clients don't have direct access to the model, but via some API and protocol by some firewall?
+
+00:08:37.000 --> 00:08:43.000
+So for example, on your smartphone, there are many apps today that actually have machine learning models.
+
+00:08:43.000 --> 00:08:52.000
+The models are inside the app. But you don't get to interact directly with the model. You get to interact via some API.
+
+00:08:52.000 --> 00:08:57.000
+So if you think of this as the the description of a machine learning based system.
+
+00:08:57.000 --> 00:09:08.000
+Then my premise is that by identifying who is the adversary and where is the adversary located in the system And what is the adversity target?
+
+00:09:08.000 --> 00:09:19.000
+By asking these two questions systematically, you can enumerate all the security and privacy problems that could arise in a system like this because of adversary behavior.
+
+00:09:19.000 --> 00:09:25.000
+So I'll give you a couple of examples where the adversary is denoted like this kind of a mask.
+
+00:09:25.000 --> 00:09:29.000
+And in red, I will show you what the adversary can control.
+
+00:09:29.000 --> 00:09:33.000
+And in blue, I will show you what the target is.
+
+00:09:33.000 --> 00:09:38.000
+And then that would give rise to a risk. And you can do this systematically to enumerate all of them.
+
+00:09:38.000 --> 00:09:48.000
+So if you go to the website link that I had on the On the first page, you will find the full version of this introductory talk.
+
+00:09:48.000 --> 00:10:03.000
+Where I go through many such examples. But here, because of time, I will just limit myself to two So adversity is this bad actor that I talked about, right? This is the bad actor who wants to somehow subvert the system and adversely has a target.
+
+00:10:03.000 --> 00:10:11.000
+So one example of this is the case where the adversary is on the far left side of this interface, on the same side as the client.
+
+00:10:11.000 --> 00:10:16.000
+And what the adversary manipulates is the input. That's what the adversary has control over.
+
+00:10:16.000 --> 00:10:27.000
+And their target is the output. Say they want the machine learning model to make the wrong inference, predict the wrong thing or identify by the same class or whatever.
+
+00:10:27.000 --> 00:10:42.000
+So here I have an example of an image recognition system. So the model is an image recognition system, meaning that given an image, it will tell you what is in that image. And you can imagine that this is the kind of thing that's used in, for example, autonomous driving.
+
+00:10:42.000 --> 00:10:55.000
+If you have an autonomous driving vehicle. That needs to scan in the scene in front of it and then interpret it, right? You need to identify what it sees So that it can make driving decisions.
+
+00:10:55.000 --> 00:11:07.000
+And one of them is interpreting traffic signs. So the machine learning model will use MRI to take a picture of the scene in front. And if there is a traffic sign, it needs to identify this as a stop sign so that it can
+
+00:11:07.000 --> 00:11:30.000
+Instruct the driving component to come to a stop. And people have shown that by making small imperceptible modifications to this input image they can pull the model into completely misclassifying the site. So misinterpreting the step sign as a speed limit sank. So the target is the integrity of the model.
+
+00:11:30.000 --> 00:11:40.000
+Whereas with the adversity control says the input. And the goal is to evade the models or make the model make the wrong decision.
+
+00:11:40.000 --> 00:11:51.000
+In this case, it's a classifier, so the job of the model is to given an input image identified what is the class of the object that's in the image.
+
+00:11:51.000 --> 00:11:58.000
+And by making imperceptible changes, the adversary could make the model do the wrong decision.
+
+00:11:58.000 --> 00:12:10.000
+So this was discovered already several years ago. The fact that machine learning models could be classified was known even longer than that.
+
+00:12:10.000 --> 00:12:15.000
+But the fact that neural networks, which are the popular type of machine learning models.
+
+00:12:15.000 --> 00:12:21.000
+Could be fooled like this. And this became apparent maybe a decade ago.
+
+00:12:21.000 --> 00:12:31.000
+And the links to papers here from about seven or eight years ago that were the first papers to discuss this.
+
+00:12:31.000 --> 00:12:36.000
+Initially, many of these papers were dealing with classifiers, but the same thing also applies to generative models.
+
+00:12:36.000 --> 00:12:48.000
+So here is a news item that talks about AI chatbots and how they could be fooled into making the wrong decision by again manipulating the input in such slight ways.
+
+00:12:48.000 --> 00:12:51.000
+So you can imagine why this is a bad thing, right?
+
+00:12:51.000 --> 00:13:03.000
+Ai chatbots are used for moderation of a discussion forums where if a user types in something that is inappropriate.
+
+00:13:03.000 --> 00:13:17.000
+Then the chatbot will detect that and then prevent you from asking me a number of weird questions like illegal questions or other types of unacceptable questions to a chatbot.
+
+00:13:17.000 --> 00:13:22.000
+And if you can modify the questions in such a way that the meaning remains the same.
+
+00:13:22.000 --> 00:13:29.000
+But the chatbot doesn't discover that as inappropriate, that would be a case of elation.
+
+00:13:29.000 --> 00:13:34.000
+So this is one example of asking this question, where is the adversary? What is the adversary's target?
+
+00:13:34.000 --> 00:13:42.000
+We have now identified one risk, which is model evasion. Sometimes this is known as adversarial examples.
+
+00:13:42.000 --> 00:13:51.000
+Slight modifications to the input that causes the model to misbehave or make the wrong prediction. It's called an adversarial example.
+
+00:13:51.000 --> 00:14:02.000
+So let me talk about a second such case. So in the second case, the adversary is still here But it's actually the client itself.
+
+00:14:02.000 --> 00:14:11.000
+Malicious party or the bad actor is the client itself And this time, and as before, what the adversary controls is the input.
+
+00:14:11.000 --> 00:14:19.000
+But now this time the target of the adversary is the model itself. So they want to somehow steal the model in some sense.
+
+00:14:19.000 --> 00:14:40.000
+And it turns out that by asking repeated questions. And getting the responses back from the machine learning model The adversary could build a replica, a stolen model Which is in some sense similar to the original model. Maybe it's as efficient as the original model.
+
+00:14:40.000 --> 00:14:45.000
+Or maybe they want to steal it because they want to then find a way to evade the historical model.
+
+00:14:45.000 --> 00:14:53.000
+And usually it turns out that These are versatile example the inputs that evade a model transfer from one model to another.
+
+00:14:53.000 --> 00:14:58.000
+So oak you you said you're saying something to me, Oak.
+
+00:14:58.000 --> 00:15:06.000
+No, no, no, no. There's just someone someone that tried to request to join but like the name is weird
+
+00:15:06.000 --> 00:15:22.000
+Okay. Right, so this is calling this is called model extraction And that's another threat, right? And you can repeat this exercise by considering the adversity to be here, for example, or here.
+
+00:15:22.000 --> 00:15:35.000
+And that will let you enumerate different security privacy concerns. So as before, there are papers that talked about model extraction. I think people realize that this is possible about a decade ago.
+
+00:15:35.000 --> 00:15:42.000
+The links in blue are work done by my students, so we became interested in this about seven or eight years ago.
+
+00:15:42.000 --> 00:15:53.000
+And since then, we have been doing a lot of work on model extraction, both from an offensive perspective meaning how do we extract models efficiently and effectively?
+
+00:15:53.000 --> 00:16:00.000
+And from a defensive perspective, like if model extraction is possible, as we have been able to show.
+
+00:16:00.000 --> 00:16:09.000
+What can you do to defend? What can you do to prevent the attacker from gaining by motor extraction?
+
+00:16:09.000 --> 00:16:20.000
+So again, this is the initial work was for restricted declassifiers But this has been seen in AI models as well. Notably.
+
+00:16:20.000 --> 00:16:26.000
+When the Chinese model DeepSeq sort of made some waves earlier this year.
+
+00:16:26.000 --> 00:16:30.000
+Openai claim that deep seek may have.
+
+00:16:30.000 --> 00:16:43.000
+Used their open ai's model GPT-4-0 or something to build a deep seek itself. So they may have sort of stroller in parts of the the OpenAI model.
+
+00:16:43.000 --> 00:17:03.000
+So this is, again, a serious concern. So if you want society to benefit from AI and machine learning, you have to make sure that people trust that. One part of making people Trust AI is trust a addressing the security and privacy concerns.
+
+00:17:03.000 --> 00:17:12.000
+And I showed you two examples, but if you go through this exercise, you will end up with a lot of them. So it's like I talked about model ceiling.
+
+00:17:12.000 --> 00:17:33.000
+I talked about in vessel examples. But there are other things like poisoning and inferring information about training data and And so on. So this is a table from a paper by researchers at Microsoft Research about five years ago where they asked industry experts
+
+00:17:33.000 --> 00:17:43.000
+Which of these attacks or threats that they care about. And this is a small sample, so you should not take this as definitive, but it's indicative, right?
+
+00:17:43.000 --> 00:17:47.000
+Some of these things are of big concern to them, like poisoning and motor stealing.
+
+00:17:47.000 --> 00:17:55.000
+And many of the others which are popular in research Apparently, these industry experts don't care about that.
+
+00:17:55.000 --> 00:18:08.000
+But you can see, and this is in relation to the second metacon I'm going to talk about later, you can see that there are many concerns that you that a practitioner who is deploying a model may want to protect against. We'll come back to that in the second part.
+
+00:18:08.000 --> 00:18:12.000
+So now let me focus on this model scaling a little bit.
+
+00:18:12.000 --> 00:18:23.000
+And then I'll talk about what is model scaling and what can be done to counter that to prevent university from stealing models.
+
+00:18:23.000 --> 00:18:31.000
+And that is to sort of set the stage for their first meta concerns, which is I'll be using the right diversity modules.
+
+00:18:31.000 --> 00:18:50.000
+So, um. If you sort of take my word that stealing your model is possible so meaning that If I train a model And I want to monetize that and I want to make money from the investment I put in training the models. I make my model available to customers.
+
+00:18:50.000 --> 00:18:59.000
+And then maybe you are one of a legitimate customers. So you have the right to send queries to my model and get responses.
+
+00:18:59.000 --> 00:19:05.000
+What model is dealing is and model extraction is that you can
+
+00:19:05.000 --> 00:19:18.000
+If I give you access to my model legitimately to you, you can try to extract that model and use it for your own purposes. That's the threat of models today, right?
+
+00:19:18.000 --> 00:19:29.000
+So there are two kinds of ways in which you could stay here. One is that Like in the case of mobile apps that have models, I give you the model, right? My model will be in your mobile app, which is in
+
+00:19:29.000 --> 00:19:36.000
+If you are using Android, you have an application package, an APK file, and the model is inside that. So you can just extract it directly.
+
+00:19:36.000 --> 00:19:42.000
+The second one is I don't give you the model, I only give you an API. But as we saw in the previous slide.
+
+00:19:42.000 --> 00:19:49.000
+Even then you might be able to construct a surrogate model, a model that is similar to my model.
+
+00:19:49.000 --> 00:20:12.000
+So we can see if we can try to prevent or detect this that will be the obvious first thought about defense right And so prevention could be that You can slow it down. You can make it expensive to send a query to a machine learning model and that way you can hope that
+
+00:20:12.000 --> 00:20:17.000
+Large scale extraction attacks is not possible. Some people have proposed this kind of defenses.
+
+00:20:17.000 --> 00:20:30.000
+And as you can imagine, it might work in some cases, right? So for example, imagine a machine learning model that is supposed to be used by doctors to interpret x-ray images.
+
+00:20:30.000 --> 00:20:38.000
+You can easily prevent model extraction by saying that each query to this model will cost, I don't know.
+
+00:20:38.000 --> 00:20:54.000
+300 bucks. And a doctor might not it might not affect them to pay 300 bucks for integrating every x-ray because if you consider the overall cost of treating a patient, this may not be that much.
+
+00:20:54.000 --> 00:20:59.000
+So in the case of the case of a model like that.
+
+00:20:59.000 --> 00:21:07.000
+Slowing down by imposing a cost to using the model can prevent model extraction because a doctor might send, I don't know.
+
+00:21:07.000 --> 00:21:17.000
+10 queries to this model every day so they might spend like a couple of thousand baht to use the model. That's not a big cost for them.
+
+00:21:17.000 --> 00:21:22.000
+But if an attacker, once you extract the model, they may need to send like hundreds of thousands of queries.
+
+00:21:22.000 --> 00:21:33.000
+And the cost will effectively throttle them. On the other hand, this will not work in other cases. Consider this this problem of autonomous driving.
+
+00:21:33.000 --> 00:21:52.000
+I mean, when a car is driving and it needs to interpret scenes it may need to classify, I don't know, 25 frames a second So if you impose across stuff like 100 baht for each image recognition query, that's not going to be realistic. That's going to harm the utility of the model.
+
+00:21:52.000 --> 00:22:00.000
+To legitimate customers as well. So preventing or slowing down might work in some cases, but it's not a general solution.
+
+00:22:00.000 --> 00:22:09.000
+The second possibility might be that you can detect it. So if you can tell the difference between a legitimate
+
+00:22:09.000 --> 00:22:17.000
+Client sending queries. And an adversaries sending queries to your model with the goal of extracting your model.
+
+00:22:17.000 --> 00:22:21.000
+If it's possible to tell the difference between the two, then you can, of course.
+
+00:22:21.000 --> 00:22:35.000
+Throttle the adversary without affecting your legitimate customers. And in some recent work, we showed that this is not always possible. It's possible if you make very restrictive assumptions about what the adversary can do.
+
+00:22:35.000 --> 00:22:50.000
+But it's not in general possible. So the consensus in the research community is that neither prevention nor detection is a generally applicable resolution. It may be applicable in certain restricted settings.
+
+00:22:50.000 --> 00:22:55.000
+But if you think about model stealing as a general problem, neither of them is going to work.
+
+00:22:55.000 --> 00:23:14.000
+So then you could ask, okay, what option remains for us So one option that remains for us is deterrence. So you don't prevent or detect, but you discourage the the adversity from trying to extract your model by changing the economic incentives.
+
+00:23:14.000 --> 00:23:23.000
+The second part, and this is why I put this stealing in courts, is that So what is killing me that in the case of model extraction.
+
+00:23:23.000 --> 00:23:32.000
+I train a model and then I let you use it But you essentially derive your own model from my model by sending queries to it, right?
+
+00:23:32.000 --> 00:23:52.000
+That might actually become a desirable business model. And it's in a very model derivation. And this is increasingly common i train a what's called a foundation model and then you might want to fine tune your model using your data starting from my model. And I'm happy to let you do that.
+
+00:23:52.000 --> 00:23:58.000
+Provided we have some kind of contract and you agree with me. And this is because training models is hard.
+
+00:23:58.000 --> 00:24:04.000
+And quite often these foundation models like GPT-4 and so on, they are very general purpose.
+
+00:24:04.000 --> 00:24:13.000
+And you can distill this model and fine tune it for some particular purpose like interpreting x-ray images.
+
+00:24:13.000 --> 00:24:24.000
+By starting from this foundation model. So this is already becoming a desirable business model. And for example, if you go to OpenIM webpage, they have a page on model distillation in the API.
+
+00:24:24.000 --> 00:24:32.000
+So they do want you to effectively steal your model, but of course they don't want you to do it without their concept.
+
+00:24:32.000 --> 00:24:48.000
+So then this problem, and this is what we saw earlier in the case of deep seek that OpenAI Even though on the one hand they encourage model distillation They don't want to deep seek to distill OpenAI's model and then compete with OpenAI.
+
+00:24:48.000 --> 00:25:07.000
+So even if modern derivation becomes a desirable business model. There is this problem of unauthorized model ownership. So model generation should only be possible if the model owner gives permission to do that. And if somebody derives a model or distills your model without your permission.
+
+00:25:07.000 --> 00:25:24.000
+Then there is a concern. And essentially, you need to resolve ownership of the model so If I trade a model, I open it up to customers, Azure Hook is one customer, but because he's smart, he there is his own model and then he competes with me using his model
+
+00:25:24.000 --> 00:25:37.000
+Then the problem that I have is demonstrating that the model that he's giving to his customers is mine. It's derived from my model. So this is what's called model ownership resolution.
+
+00:25:37.000 --> 00:25:51.000
+And in the literature, there have been two kinds of solutions proposed for module ownership resolution. One is called wall marking The other one is coughing upending. So let me briefly explain what these are.
+
+00:25:51.000 --> 00:25:58.000
+So watermarking, as the name would suggest, you may have seen watermarking in the case of images, right?
+
+00:25:58.000 --> 00:26:10.000
+You have an image and you put some kind of a a text or something that says who is the owner of the image. And the hope is that if somebody copies the image.
+
+00:26:10.000 --> 00:26:18.000
+The watermark would still be there. And if they try to remove the watermark, that damages the quality of the image.
+
+00:26:18.000 --> 00:26:37.000
+That's the essential idea behind watermarking models as well. So the model owner wants to embed something into the model, which is the watermark And so that if somebody steals the model you can use your watermark to demonstrate that that model is
+
+00:26:37.000 --> 00:26:56.000
+Either your model was derived from your model. So the first work about watermarking models was about seven years ago which showed how to do watermarks in machine learning models by using a technique called backdoor.
+
+00:26:56.000 --> 00:27:16.000
+And what they essentially do is you have some training data that lies across along some manifold And the model owner, while training the model, can add some other data which is usually away from the manifold so that it doesn't affect the model behavior in normal cases.
+
+00:27:16.000 --> 00:27:23.000
+And those additional data are called the watermark set. And they intentionally mislabel them.
+
+00:27:23.000 --> 00:27:30.000
+So that anybody else who would have trained a model using their own data
+
+00:27:30.000 --> 00:27:44.000
+Given the watermark as input, their models would behave in a certain way, whereas your model will behave in the incorrect way because you have you have assigned in the case of classifiers.
+
+00:27:44.000 --> 00:27:54.000
+You have assigned incorrect labels to your bottom set. So this is intended for stopping outright theft, also called white box theft.
+
+00:27:54.000 --> 00:28:00.000
+So if I train a model and put it in my mobile app and you download my mobile app and you extract the model.
+
+00:28:00.000 --> 00:28:15.000
+I will be able to show that that model is mine by sending that model inputs from my watermark set And then predicting ahead of time how your model is going to respond. And if your model is trained independently, it'll model as respond
+
+00:28:15.000 --> 00:28:26.000
+Correctly in some sense. Whereas if it's my model because I assigned incorrect labels I can say that it will react differently from any other model.
+
+00:28:26.000 --> 00:28:43.000
+But the whole point of this was that model watermarks should be added during training And that's okay if the model is stolen as is But if the model is extracted by an API, as you saw in the previous slide
+
+00:28:43.000 --> 00:28:47.000
+Then it's the adversity who trains the model, right? I make my model available.
+
+00:28:47.000 --> 00:28:54.000
+You decide some input samples, input queries, you send them to my model, you get my responses.
+
+00:28:54.000 --> 00:28:57.000
+And then using the response as you train your own model.
+
+00:28:57.000 --> 00:29:08.000
+And in that case, I can't add watermarks like they did in this paper where it is taken from outside the manifold and sampled and labeled incorrectly.
+
+00:29:08.000 --> 00:29:23.000
+So the only option in that case is assign incorrect predictions to some of the queries that customers themselves send. I don't have the freedom to choose watermarks from in whatever way I want.
+
+00:29:23.000 --> 00:29:28.000
+But I can decide to watermark some queries from a client.
+
+00:29:28.000 --> 00:29:39.000
+By returning incorrect predictions. So obviously I can't do that too much because that'll harm utility for legitimate clients.
+
+00:29:39.000 --> 00:29:43.000
+But I can do it for a very small number of queries.
+
+00:29:43.000 --> 00:29:48.000
+And in a paper called Dawn, we showed that this is possible in some cases.
+
+00:29:48.000 --> 00:29:52.000
+But this has to be done with care, right? So for example.
+
+00:29:52.000 --> 00:30:00.000
+If you are sending a query and then you are sending a I'm going to throw a coin and decide whether to send you an incorrect response as a watermark.
+
+00:30:00.000 --> 00:30:14.000
+Then your strategy would be to send two queries that are very similar to each other so you know that they will be they would behave in the same way, right? If I send you two pictures of a cat then a good model should say that they are both cats.
+
+00:30:14.000 --> 00:30:20.000
+So if I send these two queries and the model says one is a cat and the other one is a dog.
+
+00:30:20.000 --> 00:30:31.000
+There are two possibilities. One is one that is that the two examples might actually straddle classifier boundary. So it may be that one is really interpreted as a cat And the other one is interpreted as a dog.
+
+00:30:31.000 --> 00:30:38.000
+Or it might be that the model decided to watermark one of those and give an incorrect estimate.
+
+00:30:38.000 --> 00:30:44.000
+In either case, I can throw away this pair and not use it for my training. And that way I would remove your water mug.
+
+00:30:44.000 --> 00:31:02.000
+So we need a we need a a clever mapping function. We can't just randomly decide to watermark a subset of the queries. We have to somehow decide that similar queries will be either watermarked Both are not bottom up at all.
+
+00:31:02.000 --> 00:31:16.000
+And it turns out that that is difficult. The other problem with watermarking is that watermarking necessarily impacts utility because I'm adding something to the training data, some incorrect information to the training data So it might make the model weaker.
+
+00:31:16.000 --> 00:31:31.000
+But also my colleagues have shown that all existing watermarking schemes are not robust, meaning that an adversary can remove the watermark to such an extent that watermark modification fails, but the model still does its own job.
+
+00:31:31.000 --> 00:31:53.000
+So watermarking has some issues. The alternative to watermarking called fingerprinting, where you don't add anything to the model, but you try to extract something that's inherent to the model that you can use to later demonstrate that that model or anything derived from that will have this characteristic fingerprint.
+
+00:31:53.000 --> 00:31:56.000
+So you can think of this as like a biometric fingerprint, right?
+
+00:31:56.000 --> 00:32:04.000
+So fingerprint is not something that you carry in addition, not like an ID card or a password, but it's something inherent to you.
+
+00:32:04.000 --> 00:32:12.000
+And it turns out that you can extract this kind of inherent fingerprints for machine learning models as well.
+
+00:32:12.000 --> 00:32:17.000
+So I'm not going to go through details, but they also have issues. They are expensive.
+
+00:32:17.000 --> 00:32:23.000
+And and uh and as a general solution.
+
+00:32:23.000 --> 00:32:40.000
+It doesn't quite work. But this is what is there as a state of the art, that if you want to demonstrate, so first of all if you want to prevent model extraction and model stealing The consensus is that prevention and detection isn't realistic.
+
+00:32:40.000 --> 00:32:46.000
+But ownership verification, which is a deterrence technique can be useful.
+
+00:32:46.000 --> 00:32:50.000
+And fingerprinting and watermarking are the two deterrence technique that we know of.
+
+00:32:50.000 --> 00:33:05.000
+They have some issues, but they could be used. So that brings me to my first meta concerns, which is are we using the right diversity model? So maybe I can stop here and ask if you have any questions in the
+
+00:33:05.000 --> 00:33:19.000
+In the first introductory part or about model extraction before I proceed to the two metresents.
+
+00:33:19.000 --> 00:33:28.000
+Feel free to either send a message on the chat or Just unmute yourself and ask.
+
+00:33:28.000 --> 00:33:47.000
+So there's a question here. So you are trying to say that if we add the watermark to the module training or either module training or the module inference it can protect your model from adversary right is it correct
+
+00:33:47.000 --> 00:34:06.000
+So not protect, it doesn't stop the adversary from stealing my model But if the adversary's model, if I find a model in the wild and i suspect that that model was derived from my model I can demonstrate ownership. I can send my watermark or fingerprint to your model
+
+00:34:06.000 --> 00:34:17.000
+And so some external arbiter that I can predict that your model is going to behave in a certain way when given my watermark as input.
+
+00:34:17.000 --> 00:34:29.000
+Often a pregnancy input and your model will behave in the way I predict. And that would be a way to convince a judge or a code of law that your model is derived from my model.
+
+00:34:29.000 --> 00:34:30.000
+Okay.
+
+00:34:30.000 --> 00:34:46.000
+You understand? So the goal is not to prevent But to… detect afterwards and in the hope that if you know that If you steal my model, then I'll be able to show that you have stored in my model. That removes the incentive for you to steal my model.
+
+00:34:46.000 --> 00:34:55.000
+That's why it's called the deterrence technique right it deters you from… trying to steal my model. Did I answer your question?
+
+00:34:55.000 --> 00:34:57.000
+It's just… Okay, thank you very much.
+
+00:34:57.000 --> 00:35:00.000
+Okay.
+
+00:35:00.000 --> 00:35:15.000
+I have a question on my own, I guess. When you say that you add watermark during inference right in this case we don't embed the watermark in the model right so you add like extra layer you know um before sorry
+
+00:35:15.000 --> 00:35:20.000
+After you get the prediction from the model, right? And then add watermark on top of that. Is that correct like or
+
+00:35:20.000 --> 00:35:31.000
+So that's let's give these names. So let's say that I have a model And let's call that the target motor. That's the target of the adversity. You are the adversary.
+
+00:35:31.000 --> 00:35:40.000
+You're trying to steal my target model But if you're successful, what you will have is a surrogate model. That's the model that you train, right?
+
+00:35:40.000 --> 00:35:47.000
+So if I do watermarking at inference time, that watermark is not added to my target model.
+
+00:35:47.000 --> 00:35:56.000
+But my hope is that it will be added to your surrogate model because you're going to get responses to your queries and then use that to train your model.
+
+00:35:56.000 --> 00:36:09.000
+So it'll be added to the to the training of the surrogate model, not the training of the target model.
+
+00:36:09.000 --> 00:36:18.000
+Okay, but then how does it work in practice then? So you have to make um so in the api So you're utilized at the API level, something like that.
+
+00:36:18.000 --> 00:36:31.000
+Yeah, so I think in our case in the dawn paper, we have a post-processor to actually preprocessor that sits in front of my target model So whenever you send a query.
+
+00:36:31.000 --> 00:36:39.000
+It decides whether that should be watermarked or not. If it's not watermarked, then it just sends a query to the model, gets a response and forwards it.
+
+00:36:39.000 --> 00:36:47.000
+If it's decided that it should be watermarked, it doesn't even send the query to the model. It decides to give a predetermined response.
+
+00:36:47.000 --> 00:36:50.000
+And that will be then my watermark.
+
+00:36:50.000 --> 00:36:53.000
+There's a question in chat.
+
+00:36:53.000 --> 00:37:00.000
+Yeah, so the first question from Jacoban is, I wonder what are criteria to successfully steal the model?
+
+00:37:00.000 --> 00:37:03.000
+So there are two reasons why you might want to steal the model.
+
+00:37:03.000 --> 00:37:13.000
+One is that you don't want to use my model because you don't want to pay for me or like if it's Google Translate, you don't want to see my ads.
+
+00:37:13.000 --> 00:37:26.000
+So that's called functionality stealing, right? So you want surrogate model that is In some sense, as good as my model. So maybe accuracy of your surrogate model is close to the accuracy of the target model.
+
+00:37:26.000 --> 00:37:32.000
+So there you don't really care that my model and your model are exactly the same.
+
+00:37:32.000 --> 00:37:38.000
+You only care that your stolen model is as good as my model. So accuracy is usually the metric.
+
+00:37:38.000 --> 00:37:52.000
+There's another reason why you might want to steal the model, which is that you don't want to use it to as a surrogate, you don't want to avoid paying me money but your goal is really to fool my model, the target model
+
+00:37:52.000 --> 00:38:08.000
+And remember, we talked about adversal examples. So your goal is to steal my model and find an adversary example against your store and model because you can interact with it without any constraint. And once you find a surrogate, the best example that
+
+00:38:08.000 --> 00:38:20.000
+Fools the US dollar model, you try that example against the target model in the hope that My target model will be fooled as well. So to see why this is important or useful.
+
+00:38:20.000 --> 00:38:39.000
+Think about. Face recognition model that's used to log into your school computer right so you don't type in a password. You just show up in front of a camera. The camera understands your face. And then if it recognizes it as you, it lets you in.
+
+00:38:39.000 --> 00:39:01.000
+An adversarial example against this model would be that I wear some glasses or do some makeup or whatever so that the model will misinterpret my face as Hachan Hog's face, in which case I can successfully log into His account, right? So in order to do that, I can try to first steal the model
+
+00:39:01.000 --> 00:39:22.000
+That is doing his face recognition. And then on my own computer, I can try to interact with the model and find an adversible example Meaning that how I can change the image of my face slightly so that it would fool that model. And once I know what makeup I should wear and what glasses I should wear and what
+
+00:39:22.000 --> 00:39:32.000
+An aviation wear a wig or something like that. And then I can try that examples against the actual model in Adanox computer.
+
+00:39:32.000 --> 00:39:35.000
+So those are the two reasons. So in that second case.
+
+00:39:35.000 --> 00:39:42.000
+What you want is an exact replica, right? Because your goal is to evade the actual model.
+
+00:39:42.000 --> 00:39:48.000
+So you want your store and model to be basically the same. The same class boundary should be the same and so on.
+
+00:39:48.000 --> 00:39:55.000
+Whereas in the first running functionality stealing, you don't care about fidelity. You don't care about the models being exactly the same.
+
+00:39:55.000 --> 00:39:59.000
+As long as the store and model is as good as the original model.
+
+00:39:59.000 --> 00:40:08.000
+Is that… answer your question?
+
+00:40:08.000 --> 00:40:20.000
+Okay, so let me ask the, he has a follow-up question, but let me ask the other answer the other question. I'm still confused about how fingerprint is different from watermark.
+
+00:40:20.000 --> 00:40:28.000
+I think the way I should think about that is that watermark is something that you add something extra that you add to the model.
+
+00:40:28.000 --> 00:40:35.000
+Fingerprint is you don't add anything. You extract something inherent, right? So think about authentication.
+
+00:40:35.000 --> 00:40:50.000
+You have two ways of authenticating to your computer you can remembers and password that's like adding something to yourself something that you know And that's one way to authenticate yourself to a system.
+
+00:40:50.000 --> 00:40:56.000
+And the problem with that is you have to add something. When you add something, it's hard to remember and so on.
+
+00:40:56.000 --> 00:41:04.000
+In the case of models, when you add something, the model's performance might go down because you are adding incorrect training data to the model.
+
+00:41:04.000 --> 00:41:20.000
+Fingerprinting is you don't add anything. It's something inherent. You don't have to carry a password. You don't have to carry a token or something like that, you just show up in front of your authentication system and it recognized something inherent like your face or your fingerprint or whatever.
+
+00:41:20.000 --> 00:41:25.000
+In the case of models, that's the idea that you train a model like you normally would.
+
+00:41:25.000 --> 00:41:29.000
+And then extract something inherent that can be used to identify that model.
+
+00:41:29.000 --> 00:41:35.000
+And that way there is no utility reduction, right? Because you didn't change how the model is trained.
+
+00:41:35.000 --> 00:41:53.000
+You train the model and then extract something that's inherent. Okay, Jacoban is a follow-up question that if you understand how the scaling method would work, we could come up with methods to prevent one of the conditions Like I said, this is true in some cases, but not in general right because
+
+00:41:53.000 --> 00:42:08.000
+What people have been able to show people In the general cases is that An attacker could send queries that are indistinguishable from legitimate plan.
+
+00:42:08.000 --> 00:42:13.000
+And in that case, even though you know what the stealing technique is.
+
+00:42:13.000 --> 00:42:29.000
+You don't have enough information to distinguish between these two because you are serving hundreds of legitimate customers and one illegitimate adversary customer who is trying to steal your model And all you have is what they are sending to you.
+
+00:42:29.000 --> 00:42:34.000
+And if you can't tell the difference, you can't stop the process of stealing, right?
+
+00:42:34.000 --> 00:42:50.000
+So this is why in specific cases you can detect that. So for example, if the adversary doesn't have enough legitimacy. In the case of x-rays, let's say, if the adversity doesn't have lots of x-ray images to send to you.
+
+00:42:50.000 --> 00:42:57.000
+But they are going to send random images And then use the classifications under train the model.
+
+00:42:57.000 --> 00:43:05.000
+You can distinguish them by saying that if an incoming message is not an extra image, you will not respond or you'll get an incorrect response.
+
+00:43:05.000 --> 00:43:22.000
+But that's a very restrictive assumption. Pretty much any kind of input data it is possible to find lots of legitimately made natural data for the adversary, right? So that's why you can't tell the difference between the two.
+
+00:43:22.000 --> 00:43:36.000
+So if you have more questions, you can ask me later. Now, in the interest of time, I want to just quickly give you an idea about 13 minutes left. So the first one is the first one I'll be using the naked university model. So think about
+
+00:43:36.000 --> 00:43:57.000
+Model ownership resolution. To claim that if I'm proposing an ownership resolution scheme like fingerprinting or water marking to claim that it's a good scheme, I have to also show that it is robust, meaning that If you are the administrator and you know exactly what my watermarking of fingerprinting scheme is
+
+00:43:57.000 --> 00:44:05.000
+And you try to defeat that scheme, my scheme is still robust against such an adversary.
+
+00:44:05.000 --> 00:44:13.000
+That's standard in any system security work. You have to assume that the adversary knows what your defense is.
+
+00:44:13.000 --> 00:44:16.000
+And you have to argue that your defense is still robust.
+
+00:44:16.000 --> 00:44:33.000
+So, um. One adversity that you have to worry about is what I would call a malicious suspect right so I find the model somewhere and i think that I suspect that model, I think that that model is derived from my model
+
+00:44:33.000 --> 00:44:54.000
+And then I'm trying to send that model watermarks or fingerprints to demonstrate that It is derived from my model by if it passes this watermark verification technique If the suspect is malicious and has in fact stolen my model, either directly or via model extraction.
+
+00:44:54.000 --> 00:45:01.000
+What that suspect would do is to try to evade my verification. So they would change the model.
+
+00:45:01.000 --> 00:45:15.000
+In the hope that that'll remove the watermark sufficiently, not entirely if it removes the watermark to the extent that my verification, watermark verification and fingerprint verification fails then the adversely would have one.
+
+00:45:15.000 --> 00:45:36.000
+So every research paper that proposes a new watermarking or fingerprinting scheme would also show that their scheme is robust against a malicious suspect. So they would say that if you steal the model and then prune it or fine tune it to add noise or whatever
+
+00:45:36.000 --> 00:45:40.000
+It would still the watermark verification or fingerprint verification would still work.
+
+00:45:40.000 --> 00:45:50.000
+That's important but it's important There is another potential adversity of behavior here. I'll take One minute to ask you.
+
+00:45:50.000 --> 00:46:06.000
+What could be another adverse behavior than the malicious suspect can you think of a different kind of abusive behavior against which your technique should be robust.
+
+00:46:06.000 --> 00:46:17.000
+The malicious aspect is the case that I'm the model owner I want to protect anybody from stealing my model. I want to deter people from stealing the model.
+
+00:46:17.000 --> 00:46:32.000
+And one of you is a malicious suspect And I know how you would try to even with my my watermark of my print verification and I tried to make my scheme robust.
+
+00:46:32.000 --> 00:46:43.000
+What could be in this ecosystem What could be a different type of malicious behavior.
+
+00:46:43.000 --> 00:46:50.000
+All right maybe maybe you can think about this and well i think Yeah, Lakshmi is accusing.
+
+00:46:50.000 --> 00:47:00.000
+So why is it that the person who stole the model or the client is the only one who was behaved maliciously. It could be that I am malicious.
+
+00:47:00.000 --> 00:47:19.000
+So the scenario is that I know that he's going to train a model for x-ray detection. And I know that he's smarter than me, so he will train a better model What I want to do is that I want to wait until he trains a model
+
+00:47:19.000 --> 00:47:30.000
+And then claim that he stole my model And if I can do that, if my watermark verification or fingerprint verification succeeds against this So that's called a malicious accuser.
+
+00:47:30.000 --> 00:47:37.000
+And so… The threat is that there is an independent model owner who didn't steal my model.
+
+00:47:37.000 --> 00:47:43.000
+But I'm malicious and I try to frame them as having stored in the model.
+
+00:47:43.000 --> 00:47:47.000
+So if you look at all the literature until last year.
+
+00:47:47.000 --> 00:47:55.000
+They sort of wave their hands and say the way to defend against this malicious accuser is to use some kind of secure timestamp.
+
+00:47:55.000 --> 00:48:02.000
+So that everybody who builds a model and has a watermark of fingerprint has to get a timestamp for that.
+
+00:48:02.000 --> 00:48:07.000
+Publicly verifiable secure timestamp, like putting it on a blockchain or something like that.
+
+00:48:07.000 --> 00:48:20.000
+And then the hope I wouldn't be able to frame agile because I don't have a good model for him to steal, so I'm going to wait for him to to train a good model.
+
+00:48:20.000 --> 00:48:26.000
+But as long as he trains a model, he's going to register that model at the fingerprint and the watermark or whatever.
+
+00:48:26.000 --> 00:48:35.000
+And even if I could develop a new fingerprint or watermark that would incorrectly claim that his model is derived from my model.
+
+00:48:35.000 --> 00:48:50.000
+My timestamp is going to be newer. And therefore, there's no judge will believe this right So this is what, and therefore most papers don't even talk about the manager's accuser, except this one line that says.
+
+00:48:50.000 --> 00:48:57.000
+Your watermark of your print and that you timestamp the watermark of fingerprint and that solves the problem.
+
+00:48:57.000 --> 00:49:03.000
+So what we showed in a paper that we published last year is that Even if there is time stamping.
+
+00:49:03.000 --> 00:49:24.000
+A malicious accuser can make successful false claims against independently trained And the essential idea is that the adversity deviates from the prescribed watermark of fingerprint generation procedure so they don't the procedure will say, here is how we generate a watermark or fingerprint.
+
+00:49:24.000 --> 00:49:34.000
+They don't follow that. Instead, they find adversal examples that are transferable. So I told you earlier that An aggressive example is an input that fools a model.
+
+00:49:34.000 --> 00:49:46.000
+And quite often these are transferable, meaning that an adversal example is, again, one model is likely to fool another model for the same task. So this is what we show.
+
+00:49:46.000 --> 00:49:48.000
+And I'll give you an example of how we do this.
+
+00:49:48.000 --> 00:49:59.000
+So remember this watermarking your backdooring. So the watermark generation worked by You have some training data, you choose some out of distribution samples as the watermark.
+
+00:49:59.000 --> 00:50:10.000
+Because then they won't affect the functionality of the model. Assign them incorrect labels train the model using your real training data along with this watermark.
+
+00:50:10.000 --> 00:50:16.000
+And because it's outside. The model will memorize the watermarks.
+
+00:50:16.000 --> 00:50:20.000
+And now you can get a timestamp commitment for this model and watermark.
+
+00:50:20.000 --> 00:50:26.000
+And watermark verification is if you see a suspect model You query the suspect model using the watermark.
+
+00:50:26.000 --> 00:50:36.000
+And because the watermarks are guaranteed to give incorrect predictions. If it's an independent model, then the prediction will be different from what you've trained with.
+
+00:50:36.000 --> 00:50:50.000
+If it's a stolen model. Then the model's prediction on your watermark would be similar to what you have trained in the first place.
+
+00:50:50.000 --> 00:50:54.000
+It might not because the models have some randomness. It might not work in every case.
+
+00:50:54.000 --> 00:51:07.000
+But if your watermark consists of like say 100 individual samples and many of them match then you can say it's stolen and only a few match. You can say that's because of the randomness.
+
+00:51:07.000 --> 00:51:22.000
+So the environment modification scheme is a probabilistic scheme where you apply different examples and then compute the rate of accuracy. And if it's high If it's high, then you declare a test order.
+
+00:51:22.000 --> 00:51:36.000
+So this is the prescribed scheme. And the adversary, a malicious accuser can't do anything about automatic verification because that has to be done say in front of a giant. But what they can do is not follow these original procedure.
+
+00:51:36.000 --> 00:51:51.000
+So what they would do is they will choose the amount of distribution samples But instead of assigning them with incorrect labels, they would try to now find adversal examples for those samples. So they would try to change these slightly so that they will be misclassified.
+
+00:51:51.000 --> 00:51:59.000
+And then… They have a bunch of samples that are now adversal examples.
+
+00:51:59.000 --> 00:52:08.000
+They can get a timestamp and commitment for their lousy model And this watermark that consists of it was a challenge.
+
+00:52:08.000 --> 00:52:12.000
+And now the hope is that if somebody else trains a better model.
+
+00:52:12.000 --> 00:52:20.000
+If these advanced examples are transferable, then they are going to work against their model as well so that without changing these watermark verification procedure.
+
+00:52:20.000 --> 00:52:29.000
+I can try my watermark, which has an older timestamp. And that would succeed against the neural model.
+
+00:52:29.000 --> 00:52:36.000
+And we show that… This is successful against pretty much all the techniques.
+
+00:52:36.000 --> 00:52:48.000
+So one to think about like what could we do about this So the problem was that there was a prescribed watermark generation procedure and the adversity deviated from that. So we have to prevent that.
+
+00:52:48.000 --> 00:53:00.000
+And we could think about different solutions. We could say we don't let the model owner generate the watermark or fingerprint we can let the trusted party like a judge generate this.
+
+00:53:00.000 --> 00:53:07.000
+That becomes a bottleneck. We can say that the judge verifies that the watermarks were generated correctly.
+
+00:53:07.000 --> 00:53:14.000
+Either using cryptography or using some hardware technique. That's also expensive.
+
+00:53:14.000 --> 00:53:32.000
+We can say that you can train models that are adversely robust so that it will not be vulnerable to Imperson examples that usually comes with an accuracy loss, but also the training making your models robust against the vessel example is still an open problem.
+
+00:53:32.000 --> 00:53:41.000
+So all of these are um they are possible approaches. But may not work in all cases.
+
+00:53:41.000 --> 00:53:51.000
+So we can sort of step back and say, like, why did all these papers miss this this adversary that Lakshmi was able to see, but they didn't see.
+
+00:53:51.000 --> 00:54:10.000
+One problem is that one problem is they didn't think about adversaries systematically. This is something that system security people do Always, whereas machine learning security practices is a new discipline And even different papers have different adversity models and they might even contradict.
+
+00:54:10.000 --> 00:54:24.000
+So what is needed is a systematic way sort of identify different types of advisories in terms of their knowledge and capabilities. And I think this is an open problem.
+
+00:54:24.000 --> 00:54:40.000
+One of my students wants to work on that but It's a hard problem because you have to survey all the existing machine learning security privacy papers And then try to sort of synthesize from the different diversity models they have and come up with
+
+00:54:40.000 --> 00:54:46.000
+With the standard framework that hopefully all the follow-up work will use.
+
+00:54:46.000 --> 00:54:56.000
+There's also terminology problems. So these are not systematic, but sort of like pet peeves So one of my pet peeves is this terminology called adversable attacks.
+
+00:54:56.000 --> 00:55:05.000
+So advanced example attacks. Machine learning people started using the word reversal attacks and now even security people are using this.
+
+00:55:05.000 --> 00:55:17.000
+And that's like a misnomer, right? It's like a what's called a tautology. All attacks adversarial. There are no benign attacks, benign failures are called something else like crash failures or whatever.
+
+00:55:17.000 --> 00:55:27.000
+So the term adversal attacks is a lazy shorthand for adversary perturbation attacks or adversarial example attacks or whatever.
+
+00:55:27.000 --> 00:55:35.000
+And people use this sloppy terminology And that's a symptom of not thinking through about the adversity model.
+
+00:55:35.000 --> 00:55:59.000
+A second. Similar problem that I've seen is people use the term adaptive adversaries So in cryptography, there is a well-defined notion of an adaptive adversity. An adaptive adversary is somebody who interacts with the system And based on the responses, they change their questions. So they keep asking, sending queries, getting responses.
+
+00:55:59.000 --> 00:56:06.000
+But they're adaptive in the sense that the answers to earlier questions will determine what the newer questions are.
+
+00:56:06.000 --> 00:56:16.000
+But every cryptographic research paper and every The system security paper will assume that the adversary knows what the defense is, right?
+
+00:56:16.000 --> 00:56:23.000
+And that's called Kirchhoff's principle. If you have taken a Security 101 course, you know about Kirchhoff.
+
+00:56:23.000 --> 00:56:32.000
+With a French military cryptographer from the 19th century said that you should always assume that the adversary knows what your defense is.
+
+00:56:32.000 --> 00:56:42.000
+The only thing you can assume that the administrator doesn't know is something like secret key, some very well-defined respective information, but you should assume that the adversity knows everything else about your defense.
+
+00:56:42.000 --> 00:56:46.000
+And then you have to show that your defense is robust against adversity.
+
+00:56:46.000 --> 00:56:54.000
+In machine learning, they start using the term adversary, adaptive adversary for an adversary who knows what your defense is.
+
+00:56:54.000 --> 00:57:05.000
+And so they say like a normal adversity doesn't know what my defense is and I'll show that my defense is robust thinking such a university and then adaptive adversary is somebody who knows what my defense is.
+
+00:57:05.000 --> 00:57:14.000
+So this is not only confusing because if somebody knows about the notion of adaptive adversaries in cryptography, they will be confused by this.
+
+00:57:14.000 --> 00:57:20.000
+Second is they shouldn't even have any other adversary other than the adversary who knows about your defenses.
+
+00:57:20.000 --> 00:57:32.000
+So like I said, these are pet thieves, but I think these are symptomatic of the fact that machine learning people are not thinking through what the adversary should be.
+
+00:57:32.000 --> 00:57:44.000
+And that's why you saw all these top tier papers ignoring an adversity that that they should have spotted by doing this systematically.
+
+00:57:44.000 --> 00:57:50.000
+Okay, so that's the end of the first meta concern.
+
+00:57:50.000 --> 00:57:55.000
+Before I talk about the second metaconson, do you have any questions about the first one?
+
+00:57:55.000 --> 00:58:10.000
+The issue of finding right adversity models. Or specifically about this false claims example that I gave you?
+
+00:58:10.000 --> 00:58:17.000
+You can think about that and ask me later also So now let me go to the second metacons.
+
+00:58:17.000 --> 00:58:22.000
+Which is what we call unintended interactions. So, um.
+
+00:58:22.000 --> 00:58:28.000
+Now we talked about at length about defense against one risk, which is model extraction.
+
+00:58:28.000 --> 00:58:38.000
+And usually when we come up with defense like dawn We evaluate that against the model stealing risk.
+
+00:58:38.000 --> 00:58:51.000
+And other people are interested in other things. So there's like privacy, people evaluate techniques like differential privacy There are concerns like poisoning. You saw this list in my original slide that I showed you from Microsoft Research.
+
+00:58:51.000 --> 00:59:01.000
+But So I talk to companies, I ask them like, you know, why don't you use our fingerprinting scheme or watermarking scheme?
+
+00:59:01.000 --> 00:59:06.000
+And one question that they always ask me is that, okay, you were asking me to use your watermarking scheme.
+
+00:59:06.000 --> 00:59:14.000
+Somebody else is asking me to use differential privacy. And the third group is asking me to use some kind of adversary example protection.
+
+00:59:14.000 --> 00:59:28.000
+They all work together. And it turns out that, and so this is a real concern, right? If you're a practitioner who is going to deploy model commercially, you need to defend against multiple risks.
+
+00:59:28.000 --> 00:59:36.000
+And it seems like there hasn't been enough attention paid to whether two defenses will interact negatively with each other.
+
+00:59:36.000 --> 00:59:40.000
+Or if you try to apply a defense against one risk.
+
+00:59:40.000 --> 00:59:56.000
+Is it going to make other risks worse or better? Civil engineers will do something like environmental impact assessment when they build a when they have a new building project. They say, if we do this Is it going to make some other risk worse?
+
+00:59:56.000 --> 01:00:06.000
+But in machine learning, people haven't asked this question of what would be the unintended impact on other risks with other defenses.
+
+01:00:06.000 --> 01:00:21.000
+And we were surprised that this hasn't really been studied at length. So a couple of years ago, a student and I just looked at one such example
+
+01:00:21.000 --> 01:00:26.000
+I think in the interest of time, I'm not going to go through that.
+
+01:00:26.000 --> 01:00:44.000
+But what I will do is i will do is What I will do is give you sort of a sort of flavor of what we did and then point you to this
+
+01:00:44.000 --> 01:00:53.000
+Point you to a reference that you can reference that look at for further information.
+
+01:00:53.000 --> 01:01:04.000
+So one variant of this is a defense versus other risk, right? So if you're deploying of automatic scheme which is intended to to as a defense against model ownership.
+
+01:01:04.000 --> 01:01:11.000
+What will it do to other risks, like risk to, for example examples or risk against poisoning?
+
+01:01:11.000 --> 01:01:27.000
+And so what my student did in some work that they did last year is So the problem with the empirically evaluating this is it can take forever. So this is what we saw in the first paper where we looked at
+
+01:01:27.000 --> 01:01:42.000
+Three model ownership resolution schemes and how they interact with two other risks. So there are six combinations And it took the student like three months of experiments. So clearly this is not scalable because you might be talking about like five different defenses
+
+01:01:42.000 --> 01:01:50.000
+And implementations, the combinations thereof can be really a combined literal explosion.
+
+01:01:50.000 --> 01:01:55.000
+So we need some kind of need some rule of thumb.
+
+01:01:55.000 --> 01:02:03.000
+Technique that can quickly identify will there be unintended interaction between a defense and other risks?
+
+01:02:03.000 --> 01:02:21.000
+And if so, then you might actually do experiments. So my student intuition is that The risks are usually because of overfitting or amortization. So overfitting is you have some training data and your model tries to fit too closely to the training data rather than generalize
+
+01:02:21.000 --> 01:02:29.000
+And memorization is where you have some training data, but then some things are outliers like we saw in the watermarking example.
+
+01:02:29.000 --> 01:02:35.000
+And when there's an outlier, because the model have a lot of capacity, they tend to memorize those outliers.
+
+01:02:35.000 --> 01:02:43.000
+And his conjecture was that this is the cause for many of the risks, but also many defenses exploit that. So for example.
+
+01:02:43.000 --> 01:02:53.000
+Watermarks rely on memorization. So he systematically looked at What are the factors that affect overfitting and memorization?
+
+01:02:53.000 --> 01:03:04.000
+And whether we can use this to say if one defense that relies on some of these factors or make some of these factors move in one direction or the other.
+
+01:03:04.000 --> 01:03:08.000
+Whether that will affect others. So there's a paper here.
+
+01:03:08.000 --> 01:03:17.000
+From last year called it's an SOK systematization knowledge paper There's also a blog article that talks more about that.
+
+01:03:17.000 --> 01:03:22.000
+So I would maybe encourage you to to take a look at that.
+
+01:03:22.000 --> 01:03:31.000
+The students have also built a software framework called Amulet, which is a framework to study attacks and defenses in a comparative way.
+
+01:03:31.000 --> 01:03:40.000
+This is open source, so if you're interested in it, you can find it in github you can just uh grown it yourself and play with it.
+
+01:03:40.000 --> 01:03:54.000
+Or if you want to get access to it and then also kind of get connected to the students who are doing this, let me know and I can connect you
+
+01:03:54.000 --> 01:04:00.000
+Right now we are working on some variations of this, but I will not talk more about this.
+
+01:04:00.000 --> 01:04:10.000
+So let me do the same thing as before and summarize this part.
+
+01:04:10.000 --> 01:04:27.000
+Um so what i have Sean so far is these two meta questions that are we using the right adversity models I showed you one example of robustness against fall accusation and that all Every previous work sort of failed in this respect.
+
+01:04:27.000 --> 01:04:43.000
+And what we need is Is there… standard widely accepted streamlined adversary model So that this kind of mistake will not happen again. And that's an open area of research. So if there are PhD students who want to think about that.
+
+01:04:43.000 --> 01:04:58.000
+You can do it on your own or tell me and I will connect you to my student It is not an easy task because it requires lots of surveying of existing work.
+
+01:04:58.000 --> 01:05:07.000
+And the second meta question that I talked about was can we simultaneously deploy defense against multiple concerns? Again, this is not sufficiently explored.
+
+01:05:07.000 --> 01:05:21.000
+So we have sort of scratched the surface. But there is a toolkit that you can play with But I think there's there are lots of subsequent work that one can do.
+
+01:05:21.000 --> 01:05:34.000
+Ideally, what you would want is a way to develop a defense where you already think about uninteractions and develop it in such a way that it is less likely to conflict with other risks.
+
+01:05:34.000 --> 01:05:56.000
+And this is one. And the second one is When you want to deploy multiple one protect against multiple risks I think practitioners need some kind of algorithm or rule of thumb or recipe that lets them choose defenses that will not conflict with each other. And that might be that it's not the best defense
+
+01:05:56.000 --> 01:06:02.000
+The best defense might be such that it has negative interactions with the other wrist.
+
+01:06:02.000 --> 01:06:05.000
+But you might need to choose the second best in each case.
+
+01:06:05.000 --> 01:06:23.000
+And this is not clear because It's not even clear how to go about studying this because the combinations are too many. So there has to be some sort of fundamental ground up approach to think about this problem and what my student did is one such example
+
+01:06:23.000 --> 01:06:31.000
+But I think there's still lots of room for doing more work on this.
+
+01:06:31.000 --> 01:06:46.000
+So I'm gonna uh i'm going to boss here and this is my advertiserant slide that if this kind of work interests you or there are other things that we work on that interest you We are always looking for postdocs
+
+01:06:46.000 --> 01:06:53.000
+Graduate students and visitors and so on so let me know But in the meantime, before we go to the other talk.
+
+01:06:53.000 --> 01:07:08.000
+Now is the time to ask questions about this first part, the first talk.
+
+01:07:08.000 --> 01:07:27.000
+I can ask while waiting for questions. You're talking about transferable adversarial samples right So I guess in this case, you mean that if you have like one adversary example then the same adversary example will also be applicable to a different model? Is that the definition?
+
+01:07:27.000 --> 01:07:50.000
+Right. So not all addressable examples are transferable. But a good enough that works against one model for a specific task will work against an independent model for the same task, right? So something that fools an image classifier might also fools other image classifiers. And people have developed
+
+01:07:50.000 --> 01:07:54.000
+So there's a whole suite of techniques for finding adversal examples.
+
+01:07:54.000 --> 01:08:03.000
+And they have optimizations that increase the chances that those several examples are transferable.
+
+01:08:03.000 --> 01:08:11.000
+Thank you.
+
+01:08:11.000 --> 01:08:20.000
+Anything else?
+
+01:08:20.000 --> 01:08:31.000
+Otherwise, do you want to take a I said, no, you want to take like a few minutes break before We go to the next one.
+
+01:08:31.000 --> 01:08:34.000
+Yeah, I think we can go to the next one in this
+
+01:08:34.000 --> 01:08:46.000
+Do you want to take a break before that or can we just go to the next one right away?
+
+01:08:46.000 --> 01:08:47.000
+Yeah, we can take a five minute break and then start.
+
+01:08:47.000 --> 01:08:50.000
+Can go through the next one. Oh, okay. Right? Okay. Is it okay if we take like maybe five minutes break
+
+01:08:50.000 --> 01:08:54.000
+Minutes from now okay so you tell me when to start.
+
+01:08:54.000 --> 01:09:24.000
+I'll leave this slide on. Just so that
+
+01:12:30.000 --> 01:12:43.000
+Actually, before we start, do you think for students, can you guys turn on camera So I know that we are doing this online, but I guess Professor Ashokan, I want to see your face as well so that he would know
+
+01:12:43.000 --> 01:12:53.000
+Who he's talking to right who is teaching so if you don't mind for students can you turn on camera and then we're going to take two photos and then yeah
+
+01:12:53.000 --> 01:12:58.000
+Only if you are comfortable.
+
+01:12:58.000 --> 01:13:28.000
+How do i get
+
+01:14:05.000 --> 01:14:18.000
+And please don't seem on camera real quick. See?
+
+01:14:18.000 --> 01:14:34.000
+Okay, great. I think we have good enough. So if you guys they want to keep cameras on and if the baby says, okay, I think it's okay with cameras on um And if you see like any lags or delay, you can let me know so we can
+
+01:14:34.000 --> 01:14:40.000
+Ask participants to take off the camera. But otherwise, feel free to turn them off.
+
+01:14:40.000 --> 01:14:51.000
+Thank you. And so then you're free to start on the second part now. This is the part I'm so looking forward to as well.
+
+01:14:51.000 --> 01:14:56.000
+Okay, I think the bandit seems to be fine, so we can continue like that.
